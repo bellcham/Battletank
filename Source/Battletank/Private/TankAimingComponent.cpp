@@ -2,6 +2,7 @@
 
 #include "Battletank.h"
 #include "../Public/TankBarrel.h"
+#include "../Public/TankTurret.h"
 #include "TankAimingComponent.h"
 
 
@@ -18,12 +19,12 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
 {
-	if (!Barrel) { return; }
+	if (!(Barrel && Turret)) { return; }
 	auto TankName = GetOwner()->GetName();
 	FVector SuggestedVelocity;
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
 	(
-		GetWorld(),
+		GetOwner(), // need to do aiming relative to tank rotation, not absolute
 		SuggestedVelocity,
 		Barrel->GetSocketLocation(FName("Projectile")),
 		TargetLocation,
@@ -37,10 +38,19 @@ void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
 	{
 		auto AimDirection = SuggestedVelocity.GetSafeNormal();
 		Barrel->MoveToElevation(AimDirection.Rotation().Pitch);
+		auto DesiredAzimuth = FMath::FindDeltaAngleDegrees(GetOwner()->GetActorRotation().Yaw, AimDirection.Rotation().Yaw);
+
+		UE_LOG(LogTemp, Warning, TEXT("Aim Direction: %f, Actor Rotation: %f, Desired Azimuth: %f"), AimDirection.Rotation().Yaw, GetOwner()->GetActorRotation().Yaw, DesiredAzimuth);
+		Turret->MoveToAzimuth(DesiredAzimuth);
 	}
 }
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
+{
+	Turret = TurretToSet;
 }
