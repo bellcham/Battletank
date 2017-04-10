@@ -39,8 +39,6 @@ void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
 		auto AimDirection = SuggestedVelocity.GetSafeNormal();
 		Barrel->MoveToElevation(AimDirection.Rotation().Pitch);
 		auto DesiredAzimuth = FMath::FindDeltaAngleDegrees(GetOwner()->GetActorRotation().Yaw, AimDirection.Rotation().Yaw);
-
-		UE_LOG(LogTemp, Warning, TEXT("Aim Direction: %f, Actor Rotation: %f, Desired Azimuth: %f"), AimDirection.Rotation().Yaw, GetOwner()->GetActorRotation().Yaw, DesiredAzimuth);
 		Turret->MoveToAzimuth(DesiredAzimuth);
 	}
 }
