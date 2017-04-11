@@ -19,8 +19,10 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
 {
-	if (!(Barrel && Turret)) { return; }
 	auto TankName = GetOwner()->GetName();
+	UE_LOG(LogTemp, Warning, TEXT("%f: Aiming component called on tank %s"), GetWorld()->GetTimeSeconds(), *TankName);
+
+	if (!(Barrel && Turret)) { return; }
 	FVector SuggestedVelocity;
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
 	(
@@ -40,6 +42,7 @@ void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
 		Barrel->MoveToElevation(AimDirection.Rotation().Pitch);
 		auto DesiredAzimuth = FMath::FindDeltaAngleDegrees(GetOwner()->GetActorRotation().Yaw, AimDirection.Rotation().Yaw);
 		Turret->MoveToAzimuth(DesiredAzimuth);
+		UE_LOG(LogTemp, Warning, TEXT("%f: Trying to move turret to %f and barrel to %f"), GetWorld()->GetTimeSeconds(), AimDirection.Rotation().Pitch, DesiredAzimuth);
 	}
 }
 

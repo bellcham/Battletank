@@ -34,6 +34,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ATank::AimAt(FVector TargetLocation)
 {
 	AimingComponent->AimAt(TargetLocation, FiringSpeed);
+	//UE_LOG(LogTemp, Warning, TEXT("%f: Tank %s is aiming at %s"), GetWorld()->GetTimeSeconds(), *GetName(), *TargetLocation.ToString());
 }
 
 void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
@@ -50,13 +51,18 @@ void ATank::SetTurretReference(UTankTurret * TurretToSet)
 void ATank::Fire()
 {
 	if (!Barrel) { return; }
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
-	// Spawn a projectile at the socket location on the barrel.
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-		ProjectileBlueprint, 
-		Barrel->GetSocketLocation(FName("Projectile")), 
-		Barrel->GetSocketRotation(FName("Projectile"))
-		);
-	Projectile->Launch(FiringSpeed);
+	if (isReloaded)
+	{
+		// Spawn a projectile at the socket location on the barrel.
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+		Projectile->Launch(FiringSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+	}
 }
 

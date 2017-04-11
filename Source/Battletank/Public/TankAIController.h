@@ -20,8 +20,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	ATank* GetControlledTank() const;
-	ATank* GetPlayerTank() const;
 	ATank* ControlledTank = nullptr;
 	ATank* TargetTank = nullptr;
 	FVector TargetPosition;
