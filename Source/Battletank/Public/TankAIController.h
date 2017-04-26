@@ -23,5 +23,7 @@ private:
 	ATank* ControlledTank = nullptr;
 	ATank* TargetTank = nullptr;
 	FVector TargetPosition;
+
+	float AcceptanceRadius = 3000.f;
 	
 };

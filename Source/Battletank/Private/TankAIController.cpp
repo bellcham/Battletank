@@ -31,9 +31,29 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	if (TargetTank && ControlledTank)
 	{
+		auto PathFollowingResult = MoveToActor(TargetTank, AcceptanceRadius);
+		//switch (PathFollowingResult) 
+		//{
+		//case EPathFollowingRequestResult::AlreadyAtGoal:
+		//	UE_LOG(LogTemp, Warning, TEXT("%s: EPathFollowingRequestResult::AlreadyAtGoal"), *(ControlledTank->GetName()));
+		//	break;
+		//case EPathFollowingRequestResult::Failed:
+		//	UE_LOG(LogTemp, Warning, TEXT("%s: EPathFollowingRequestResult::Failed"), *(ControlledTank->GetName()));
+		//	break;
+		//case EPathFollowingRequestResult::RequestSuccessful:
+		//	UE_LOG(LogTemp, Warning, TEXT("%s: EPathFollowingRequestResult::RequestSuccessful"), *(ControlledTank->GetName()));
+		//	break;
+		//default:
+		//	UE_LOG(LogTemp, Warning, TEXT("%s: Unkown path following request result"), *(ControlledTank->GetName()));
+		//	break;
+		//}
+
+		
+
+		
 		TargetPosition = TargetTank->GetActorLocation();
 		ControlledTank->AimAt(TargetPosition);
-		ControlledTank->Fire(); // TODO don't fire every frame
+		//ControlledTank->Fire(); // TODO don't fire every frame
 	}
 }
 

@@ -23,6 +23,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = Movement)
 	void IntendMoveClockwise(float Throw);
+
+	void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 	
 private:
 	UTankTrack* LeftTrack;
