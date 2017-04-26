@@ -19,8 +19,11 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-private:
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	ATank* GetControlledTank() const;
+
+private:
 	void AimTowardCrosshair();
 	bool GetSightRayHitLocation(FVector &HitLocation) const;
 };
