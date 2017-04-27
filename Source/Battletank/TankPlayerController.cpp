@@ -20,7 +20,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		AimingComponent->AimAt(HitLocation, AimingComponent->FiringSpeed);
+		AimingComponent->AimAt(HitLocation);
 	}
 }
 

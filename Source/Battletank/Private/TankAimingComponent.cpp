@@ -1,8 +1,9 @@
 // Adam Bellchambers 2017
 
 #include "Battletank.h"
-#include "../Public/TankBarrel.h"
-#include "../Public/TankTurret.h"
+#include "TankBarrel.h"
+#include "TankTurret.h"
+#include "Projectile.h"
 #include "TankAimingComponent.h"
 
 
@@ -18,7 +19,7 @@ void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* Tur
 	Turret = TurretToSet;
 }
 
-void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
+void UTankAimingComponent::AimAt(FVector TargetLocation)
 {
 	if (!ensure(Barrel && Turret)) { return; }
 	FVector SuggestedVelocity;
@@ -40,5 +41,23 @@ void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
 		Barrel->MoveToElevation(AimDirection.Rotation().Pitch);
 		auto DesiredAzimuth = FMath::FindDeltaAngleDegrees(GetOwner()->GetActorRotation().Yaw, AimDirection.Rotation().Yaw);
 		Turret->MoveToAzimuth(DesiredAzimuth);
+	}
+}
+
+void UTankAimingComponent::Fire()
+{
+	if (!ensure(Barrel)) { return; }
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+
+	if (isReloaded)
+	{
+		// Spawn a projectile at the socket location on the barrel.
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+		Projectile->Launch(FiringSpeed);
+		LastFireTime = FPlatformTime::Seconds();
 	}
 }

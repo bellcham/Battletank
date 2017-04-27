@@ -16,6 +16,7 @@ enum class EAimingState : uint8
 //Forward declaration
 class UTankBarrel; 
 class UTankTurret;
+class AProjectile;
 
 // Holds parameters for aiming
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -29,10 +30,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
-	void AimAt(FVector TargetLocation, float FiringSpeed);
+	void AimAt(FVector TargetLocation);
 	
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	void Fire();
+		
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float FiringSpeed = 100000; // TODO Determine sensible default
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTimeInSeconds = 3.f; //TODO Magic number
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
@@ -41,4 +51,5 @@ protected:
 private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
+	double LastFireTime = 0;
 };
