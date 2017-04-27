@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Adam Bellchambers 2017
 
 #pragma once
 
@@ -38,7 +38,7 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EAimingState AimingState = EAimingState::Reloading;
+	EAimingState AimingState = EAimingState::Aiming;
 
 private:
 	UTankBarrel* Barrel = nullptr;

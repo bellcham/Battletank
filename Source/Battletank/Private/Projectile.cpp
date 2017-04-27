@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Adam Bellchambers 2017
 
 #include "Battletank.h"
 #include "Projectile.h"
@@ -28,6 +28,7 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::Launch(float LaunchSpeed)
 {
+	if (!ensure(MovementComponent)) { return; }
 	MovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * LaunchSpeed);
 	MovementComponent->Activate();
 }

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Adam Bellchambers 2017
 
 #include "Battletank.h"
 #include "../Public/TankBarrel.h"
@@ -19,18 +19,18 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
-	if (!BarrelToSet || !TurretToSet) { return; }
+	if (!ensure(BarrelToSet && TurretToSet)) { return; }
 	Barrel = BarrelToSet;
 	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
 {
-	if (!(Barrel && Turret)) { return; }
+	if (!ensure(Barrel && Turret)) { return; }
 	FVector SuggestedVelocity;
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
 	(
-		GetOwner(), // need to do aiming relative to tank rotation, not absolute
+		GetOwner(), // TODO need to do aiming relative to tank rotation, not absolute??
 		SuggestedVelocity,
 		Barrel->GetSocketLocation(FName("Projectile")),
 		TargetLocation,
@@ -46,7 +46,6 @@ void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
 		Barrel->MoveToElevation(AimDirection.Rotation().Pitch);
 		auto DesiredAzimuth = FMath::FindDeltaAngleDegrees(GetOwner()->GetActorRotation().Yaw, AimDirection.Rotation().Yaw);
 		Turret->MoveToAzimuth(DesiredAzimuth);
-		//UE_LOG(LogTemp, Warning, TEXT("%f: Trying to move turret to %f and barrel to %f"), GetWorld()->GetTimeSeconds(), AimDirection.Rotation().Pitch, DesiredAzimuth);
 	}
 }
 

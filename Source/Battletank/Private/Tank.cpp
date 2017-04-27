@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Adam Bellchambers 2017
 
 #include "Battletank.h"
 #include "../Public/TankMovementComponent.h"
@@ -16,10 +16,15 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void ATank::AimAt(FVector TargetLocation)
 {
+	if (!ensure(AimingComponent)) { return; }
 	AimingComponent->AimAt(TargetLocation, FiringSpeed);
-
 }
 
 // TODO Delete
@@ -36,7 +41,7 @@ void ATank::AimAt(FVector TargetLocation)
 
 void ATank::Fire()
 {
-	if (!Barrel) { return; }
+	if (!ensure(Barrel)) { return; }
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
 	if (isReloaded)

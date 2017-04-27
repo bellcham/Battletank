@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Adam Bellchambers 2017
 
 #include "Battletank.h"
 #include "../Public/Tank.h"
@@ -8,7 +8,7 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 	ControlledTank = Cast<ATank>(GetPawn());
-	if (ControlledTank)
+	if (ensure(ControlledTank))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AIController %s is controlling %s"), *this->GetName(), *ControlledTank->GetName());
 	}
@@ -17,7 +17,7 @@ void ATankAIController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("AIController %s is not controlling a tank"), *(this->GetName()));
 	}
 	TargetTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (TargetTank)
+	if (ensure(TargetTank))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AIController %s detected player tank %s"), *(this->GetName()), *TargetTank->GetName());
 	}
@@ -29,7 +29,7 @@ void ATankAIController::BeginPlay()
 
 void ATankAIController::Tick(float DeltaTime)
 {
-	if (TargetTank && ControlledTank)
+	if (ensure(TargetTank && ControlledTank))
 	{
 		auto PathFollowingResult = MoveToActor(TargetTank, AcceptanceRadius);
 		//switch (PathFollowingResult) 

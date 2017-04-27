@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Adam Bellchambers 2017
 
 #pragma once
 
@@ -20,6 +20,8 @@ class BATTLETANK_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATank();
+
+	virtual void BeginPlay() override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
