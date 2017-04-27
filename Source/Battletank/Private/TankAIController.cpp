@@ -1,59 +1,26 @@
 // Adam Bellchambers 2017
 
 #include "Battletank.h"
-#include "../Public/Tank.h"
-#include "../Public/TankAIController.h"
+#include "TankAimingComponent.h"
+#include "TankAIController.h"
 
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	ControlledTank = Cast<ATank>(GetPawn());
-	if (ensure(ControlledTank))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AIController %s is controlling %s"), *this->GetName(), *ControlledTank->GetName());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AIController %s is not controlling a tank"), *(this->GetName()));
-	}
-	TargetTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (ensure(TargetTank))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AIController %s detected player tank %s"), *(this->GetName()), *TargetTank->GetName());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AIController %s did not detect a player tank"), *(this->GetName()));
-	}
+	TargetTank = Cast<AActor>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (!ensure(TargetTank)) { return; }
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
 }
 
 void ATankAIController::Tick(float DeltaTime)
 {
-	if (ensure(TargetTank && ControlledTank))
+	if (ensure(TargetTank))
 	{
 		auto PathFollowingResult = MoveToActor(TargetTank, AcceptanceRadius);
-		//switch (PathFollowingResult) 
-		//{
-		//case EPathFollowingRequestResult::AlreadyAtGoal:
-		//	UE_LOG(LogTemp, Warning, TEXT("%s: EPathFollowingRequestResult::AlreadyAtGoal"), *(ControlledTank->GetName()));
-		//	break;
-		//case EPathFollowingRequestResult::Failed:
-		//	UE_LOG(LogTemp, Warning, TEXT("%s: EPathFollowingRequestResult::Failed"), *(ControlledTank->GetName()));
-		//	break;
-		//case EPathFollowingRequestResult::RequestSuccessful:
-		//	UE_LOG(LogTemp, Warning, TEXT("%s: EPathFollowingRequestResult::RequestSuccessful"), *(ControlledTank->GetName()));
-		//	break;
-		//default:
-		//	UE_LOG(LogTemp, Warning, TEXT("%s: Unkown path following request result"), *(ControlledTank->GetName()));
-		//	break;
-		//}
-
-		
-
-		
 		TargetPosition = TargetTank->GetActorLocation();
-		ControlledTank->AimAt(TargetPosition);
-		//ControlledTank->Fire(); // TODO don't fire every frame
+		AimingComponent->AimAt(TargetPosition, AimingComponent->FiringSpeed);
+		//ControlledTank->Fire(); // TODO re-enable firing
 	}
 }
 

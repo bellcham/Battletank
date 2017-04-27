@@ -4,7 +4,6 @@
 #include "../Public/TankTrack.h"
 #include "TankMovementComponent.h"
 
-
 void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {
 	if (!ensure(LeftTrackToSet && RightTrackToSet)) { return; }
@@ -26,7 +25,6 @@ void UTankMovementComponent::IntendMoveForward(float Throw)
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 }
-
 
 void UTankMovementComponent::IntendMoveClockwise(float Throw)
 {

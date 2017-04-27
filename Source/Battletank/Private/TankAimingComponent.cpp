@@ -6,16 +6,10 @@
 #include "TankAimingComponent.h"
 
 
-// Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
-
 
 void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
@@ -48,14 +42,3 @@ void UTankAimingComponent::AimAt(FVector TargetLocation, float FiringSpeed)
 		Turret->MoveToAzimuth(DesiredAzimuth);
 	}
 }
-
-// TODO Delete
-//void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
-//{
-//	Barrel = BarrelToSet;
-//}
-//
-//void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
-//{
-//	Turret = TurretToSet;
-//}

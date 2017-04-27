@@ -5,9 +5,6 @@
 #include "Components/StaticMeshComponent.h"
 #include "TankTrack.generated.h"
 
-/**
- * 
- */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankTrack : public UStaticMeshComponent
 {
@@ -19,5 +16,4 @@ public:
 	// Max force, per track, in newtons.
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxTractiveForce = 200000;
-	
 };

@@ -3,9 +3,6 @@
 #include "Battletank.h"
 #include "TankBarrel.h"
 
-
-
-
 void UTankBarrel::MoveToElevation(float DesiredElevation)
 {
 	// Move barrel appropriate amount for frame based on max rotation rate.

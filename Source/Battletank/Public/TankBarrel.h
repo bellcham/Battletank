@@ -5,9 +5,6 @@
 #include "Components/StaticMeshComponent.h"
 #include "TankBarrel.generated.h"
 
-/**
- * 
- */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankBarrel : public UStaticMeshComponent
 {
@@ -25,8 +22,4 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	float MinDegreesElevation = -1.f;
-
-	
-	
-	
 };

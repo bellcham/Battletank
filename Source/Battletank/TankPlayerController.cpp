@@ -2,46 +2,25 @@
 
 #include "Battletank.h"
 #include "TankAimingComponent.h"
-#include "../Public/Tank.h"
 #include "TankPlayerController.h"
+
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto ControlledTank = GetControlledTank();
-	if (ensure(ControlledTank))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController %s is controlling %s"), *(this->GetName()), *GetControlledTank()->GetName());
-		auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
-		FoundAimingComponent(AimingComponent);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController %s is not controlling a tank"), *(this->GetName()));
-	}
-	
+	UE_LOG(LogTemp, Warning, TEXT("PlayerController %s is controlling %s"), *(this->GetName()), *GetPawn()->GetName());
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
+	FoundAimingComponent(AimingComponent);
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AimTowardCrosshair();
-}
-
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
-void ATankPlayerController::AimTowardCrosshair()
-{
-	if (!ensure(GetControlledTank())) { return;  }
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		//DrawDebugLine(GetWorld(), HitLocation, HitLocation + FVector(0.f, 0.f, 10000.f), FColor(255, 0, 0, 0), false);
-		//if it hits the landscape, tell controlled tank to aim at this point
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComponent->AimAt(HitLocation, AimingComponent->FiringSpeed);
 	}
 }
 
