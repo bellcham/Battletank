@@ -46,10 +46,13 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EAimingState AimingState = EAimingState::Aiming;
+	EAimingState AimingState = EAimingState::Reloading;
 
 private:
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+	virtual void BeginPlay() override;
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 	double LastFireTime = 0;
+	bool bIsBarrelAimed = false;
 };

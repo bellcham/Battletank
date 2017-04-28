@@ -19,10 +19,33 @@ void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* Tur
 	Turret = TurretToSet;
 }
 
+void UTankAimingComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	LastFireTime = FPlatformTime::Seconds();
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+{
+	if((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	{
+		AimingState = EAimingState::Reloading;
+	}
+	else if (bIsBarrelAimed)
+	{
+		AimingState = EAimingState::Locked;
+	}
+	else
+	{
+		AimingState = EAimingState::Aiming;
+	}
+}
+
 void UTankAimingComponent::AimAt(FVector TargetLocation)
 {
 	if (!ensure(Barrel && Turret)) { return; }
 	FVector SuggestedVelocity;
+	bIsBarrelAimed = false;
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
 	(
 		GetOwner(), // TODO need to do aiming relative to tank rotation, not absolute??
@@ -41,15 +64,14 @@ void UTankAimingComponent::AimAt(FVector TargetLocation)
 		Barrel->MoveToElevation(AimDirection.Rotation().Pitch);
 		auto DesiredAzimuth = FMath::FindDeltaAngleDegrees(GetOwner()->GetActorRotation().Yaw, AimDirection.Rotation().Yaw);
 		Turret->MoveToAzimuth(DesiredAzimuth);
+		bIsBarrelAimed = AimDirection.Equals(Barrel->GetForwardVector().GetSafeNormal(), 0.01f);
 	}
 }
 
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(Barrel)) { return; }
-	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-
-	if (isReloaded)
+	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
+	if (AimingState != EAimingState::Reloading)
 	{
 		// Spawn a projectile at the socket location on the barrel.
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(

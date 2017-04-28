@@ -20,7 +20,7 @@ void ATankAIController::Tick(float DeltaTime)
 		auto PathFollowingResult = MoveToActor(TargetTank, AcceptanceRadius);
 		TargetPosition = TargetTank->GetActorLocation();
 		AimingComponent->AimAt(TargetPosition);
-		//ControlledTank->Fire(); // TODO re-enable firing
+		//AimingComponent->Fire(); // TODO re-enable firing
 	}
 }
 
