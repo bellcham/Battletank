@@ -27,6 +27,7 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
+	
 	if((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
 		AimingState = EAimingState::Reloading;
@@ -82,4 +83,9 @@ void UTankAimingComponent::Fire()
 		Projectile->Launch(FiringSpeed);
 		LastFireTime = FPlatformTime::Seconds();
 	}
+}
+
+EAimingState UTankAimingComponent::GetAimingState()
+{
+	return AimingState;
 }

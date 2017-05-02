@@ -44,6 +44,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTimeInSeconds = 3.f; //TODO Magic number
 
+	EAimingState GetAimingState();
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EAimingState AimingState = EAimingState::Reloading;

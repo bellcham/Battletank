@@ -15,12 +15,17 @@ void ATankAIController::BeginPlay()
 
 void ATankAIController::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 	if (ensure(TargetTank))
 	{
 		auto PathFollowingResult = MoveToActor(TargetTank, AcceptanceRadius);
 		TargetPosition = TargetTank->GetActorLocation();
 		AimingComponent->AimAt(TargetPosition);
-		//AimingComponent->Fire(); // TODO re-enable firing
+		if(AimingComponent->GetAimingState() == EAimingState::Locked)
+		{
+			AimingComponent->Fire();
+		}
+		
 	}
 }
 
