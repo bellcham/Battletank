@@ -23,7 +23,7 @@ void ATankAIController::Tick(float DeltaTime)
 		AimingComponent->AimAt(TargetPosition);
 		if(AimingComponent->GetAimingState() == EAimingState::Locked)
 		{
-			AimingComponent->Fire();
+			//AimingComponent->Fire(); TODO Renable firing
 		}
 		
 	}

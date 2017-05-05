@@ -10,7 +10,8 @@ enum class EAimingState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	NoAmmo
 };
 
 //Forward declaration
@@ -41,15 +42,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
+
+
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTimeInSeconds = 3.f; //TODO Magic number
 
 	EAimingState GetAimingState();
+	uint8 GetAmmunition();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EAimingState AimingState = EAimingState::Reloading;
-
+	
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	uint8 Ammunition = 5;
 private:
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 	virtual void BeginPlay() override;
