@@ -17,6 +17,11 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
+	UStaticMeshComponent* CollisionMesh = nullptr;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
+	UParticleSystemComponent* LaunchBlast = nullptr;
 
 private:
 	UProjectileMovementComponent* MovementComponent = nullptr;
