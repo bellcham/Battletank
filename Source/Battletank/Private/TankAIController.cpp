@@ -19,7 +19,7 @@ void ATankAIController::Tick(float DeltaTime)
 	if (ensure(TargetTank))
 	{
 		auto PathFollowingResult = MoveToActor(TargetTank, AcceptanceRadius);
-		TargetPosition = TargetTank->GetActorLocation();
+		TargetPosition = TargetTank->GetActorLocation() + FVector(0.f,0.f,75.f); // Aim 0.75m above target tank location
 		AimingComponent->AimAt(TargetPosition);
 		if(AimingComponent->GetAimingState() == EAimingState::Locked)
 		{

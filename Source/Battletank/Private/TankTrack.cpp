@@ -28,7 +28,6 @@ void UTankTrack::DriveTrack()
 	CurrentThrottle = 0.0f;
 }
 
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams( FComponentHitSignature, UPrimitiveComponent*, HitComponent, AActor*, OtherActor, UPrimitiveComponent*, OtherComp, FVector, NormalImpulse, const FHitResult&, Hit );
 void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("TankTrack Hit Event"))
